@@ -25,6 +25,12 @@ sudo apt install ffmpeg
 winget install --id=Gyan.FFmpeg  -e
 ```
 
+### Kodları İndirme
+```bash
+git clone https://github.com/metehansenyer/compress-video.git
+cd compress-video
+```
+
 ## Kullanım
 
 1. Videolarınızı `input/` klasörüne koyun
