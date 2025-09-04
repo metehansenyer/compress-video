@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # =============================
 INPUT_DIR = Path("input")
 OUTPUT_DIR = Path("output")
-SUPPORTED_FORMATS = [".mp4", ".mov"]
+SUPPORTED_FORMATS = [".mp4", ".mov", ".mkv"]
 PRESET = "medium"  # slow, medium, fast dışına çıkmamaya çalışın. slow'da ortlama bir bölüm 20dk, fast'te ortalama bir bölüm 6dk sürüyor.
 CRF = "28" # 24-28 arasında kalmasına dikkat edin. 24 en kaliteli 28 en kalitesiz izlenebilir durumda ama. 
 
@@ -29,7 +29,7 @@ def check_dependencies():
         print("✅ FFmpeg bulundu.")
 
 def get_video_files():
-    """Input klasöründeki tüm mp4/mov dosyalarını bulur."""
+    """Input klasöründeki tüm mp4/mov/mkv dosyalarını bulur."""
     video_files = []
     for ext in SUPPORTED_FORMATS:
         video_files.extend(INPUT_DIR.rglob(f"*{ext}"))
