@@ -3,9 +3,7 @@ import sys
 import shutil
 import subprocess
 import time
-import argparse
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # =============================
 #  CONFIG
@@ -82,32 +80,11 @@ def human_size(size_bytes):
         size_bytes /= 1024
     return f"{size_bytes:.2f} TB"
 
-def get_optimal_workers(video_count, user_workers=None):
-    """İdeal worker sayısını belirle."""
-    cpu_count = os.cpu_count() or 4
-
-    if user_workers:  # kullanıcı manuel belirlediyse onu kullan
-        return user_workers
-
-    # Eğer video sayısı azsa ona göre ayarla
-    if video_count <= 2:
-        return 1
-
-    # M1 gibi cihazlarda libx265 CPU-bound olduğu için 2-3 worker genelde en verimli
-    if cpu_count <= 8:
-        return min(3, video_count)
-
-    # Daha güçlü CPU’larda daha fazla worker kullanılabilir
-    return min(cpu_count // 2, video_count)
 
 # =============================
 #  MAIN
 # =============================
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--workers", type=int, help="Paralel iş sayısı (varsayılan: otomatik seçim)")
-    args = parser.parse_args()
-
     print(f"🎬 Video Optimize Aracına Hoşgeldiniz (preset: {PRESET}, crf: {CRF})")
     check_dependencies()
 
@@ -123,24 +100,20 @@ def main():
 
     start_all = time.time()
 
-    max_workers = get_optimal_workers(len(video_files), args.workers)
-    print(f"⚡ Kullanılan worker sayısı: {max_workers}\n")
+    print("🔄 Videolar tek tek işleniyor...\n")
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(optimize_video, video, ensure_output_path(video)): video for video in video_files}
-
-        for i, future in enumerate(as_completed(futures), 1):
-            video = futures[future]
-            try:
-                result = future.result()
-                if result:
-                    before, after, elapsed = result
-                    total_before += before
-                    total_after += after
-                    total_time += elapsed
-                    results.append((video, before, after, elapsed))
-            except Exception as e:
-                print(f"❌ {video} işlenirken hata: {e}")
+    for i, video in enumerate(video_files, 1):
+        print(f"📺 [{i}/{len(video_files)}] İşleniyor: {video.name}")
+        try:
+            result = optimize_video(video, ensure_output_path(video))
+            if result:
+                before, after, elapsed = result
+                total_before += before
+                total_after += after
+                total_time += elapsed
+                results.append((video, before, after, elapsed))
+        except Exception as e:
+            print(f"❌ {video} işlenirken hata: {e}")
 
     end_all = time.time()
     elapsed_all = end_all - start_all

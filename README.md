@@ -37,12 +37,6 @@ cd compress-video
 2. Çalıştırın: `python main.py`
 3. Sıkıştırılmış videolar `output/` klasöründe oluşur
 
-### Gelişmiş Kullanım
-```bash
-# Paralel iş sayısını belirtin
-python main.py --workers 4
-```
-
 ## Yapılandırma
 
 `main.py` dosyasının üst kısmındaki ayarları düzenleyin:
