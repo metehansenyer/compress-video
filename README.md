@@ -35,18 +35,30 @@ cd compress-video
 
 1. Videolarınızı `input/` klasörüne koyun
 2. Çalıştırın: `python main.py`
-3. Sıkıştırılmış videolar `output/` klasöründe oluşur
+3. Program otomatik olarak donanımınızı algılar ve en uygun kodlayıcıyı seçer
+4. Sıkıştırılmış videolar `output/` klasöründe oluşur
+
+### Manuel GPU Kontrolü
+
+İstiyorsanız GPU kullanımını manuel olarak ayarlayabilirsiniz:
+
+```python
+USE_GPU = True   # GPU'yu zorla kullan
+USE_GPU = False  # CPU'yu zorla kullan
+USE_GPU = None   # Otomatik algılama (varsayılan)
+```
 
 ## Yapılandırma
 
 `main.py` dosyasının üst kısmındaki ayarları düzenleyin:
 
 ```python
-PRESET = "medium"  # slow, medium, fast, faster 
+PRESET = "medium"  # CPU için: slow, medium, fast, faster
 CRF = "28"        # 24-28 arası (24: kaliteli, 28: sıkıştırılmış)
+USE_GPU = False    # GPU kullanım ayarı
 ```
 
-## Test Sonuçları
+## Test Sonuçları (CRF: 28)
 
 **Test Cihazı**: MacBook M1 Air 8GB
 
@@ -67,3 +79,11 @@ CRF = "28"        # 24-28 arası (24: kaliteli, 28: sıkıştırılmış)
 - **Süre**: 1sa 38dk
 - **Sonuç**: 1380 MB
 - **Tasarruf**: 69%
+
+**Test Cihazı**: ASUS TUF GTX 1660 GAMING OC 6 GB
+
+### 1080p Video (464.85 MB)
+| Preset | Süre | Sonuç | Tasarruf |
+|--------|------|--------|----------|
+| medium | 1 dk 25 sn | 224 MB | 51% |
+| p6 | 3dk 21 sn | 216  MB | 53% |
