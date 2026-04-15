@@ -10,7 +10,7 @@ from pathlib import Path
 # =============================
 INPUT_DIR = Path("input")
 OUTPUT_DIR = Path("output")
-SUPPORTED_FORMATS = [".mp4", ".mov", ".mkv"]
+SUPPORTED_FORMATS = [".mp4", ".mov", ".mkv", ".MOV"]
 PRESET = "medium"  # slow, medium, fast dışına çıkmamaya çalışın. slow'da ortlama bir bölüm 20dk, fast'te ortalama bir bölüm 6dk sürüyor.
 CRF = "28" # 24-28 arasında kalmasına dikkat edin. 24 en kaliteli 28 en kalitesiz izlenebilir durumda ama.
 
